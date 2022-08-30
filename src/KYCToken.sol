@@ -19,11 +19,21 @@ contract KYCToken is ERC20 {
         _;
     }
 
+    modifier checkAccredited() {
+        require(msg.sender.balance >= 1 ether);
+        _;
+    }
+
     function isEmpty(string memory value) internal pure returns (bool) {
         return bytes(value).length == 0;
     }
 
-    function _mint(address to, uint256 amount) internal override checkKYC {
+    function _mint(address to, uint256 amount)
+        internal
+        override
+        checkKYC
+        checkAccredited
+    {
         totalSupply += amount;
 
         // Cannot overflow because the sum of all user

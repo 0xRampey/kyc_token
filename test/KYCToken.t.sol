@@ -23,6 +23,7 @@ contract KYCTokenTest is Test {
     }
 
     function testFailMintOnNonKYC(address customer) public {
+        vm.deal(customer, 1 ether);
         vm.prank(customer);
         token.mint(customer, 100);
     }
@@ -31,8 +32,31 @@ contract KYCTokenTest is Test {
         public
     {
         vm.assume(bytes(customerName).length > 0);
+        vm.deal(customer, 1 ether);
         vm.startPrank(customer); // Run test from given 'customer' address
         token.kyc(customerName);
+        token.mint(customer, 100);
+        vm.stopPrank();
+    }
+
+    function testFailMintIfNotAccredited(address customer, uint256 amount)
+        public
+    {
+        vm.assume(amount < 1 ether);
+        vm.deal(customer, amount);
+
+        vm.startPrank(customer);
+        token.kyc("Random name");
+        token.mint(customer, 100);
+        vm.stopPrank();
+    }
+
+    function testMintIfAccredited(address customer, uint256 amount) public {
+        vm.assume(amount >= 1 ether);
+        vm.deal(customer, amount);
+
+        vm.startPrank(customer);
+        token.kyc("Random name");
         token.mint(customer, 100);
         vm.stopPrank();
     }
