@@ -8,7 +8,17 @@
 Install Foundry from [here.](https://book.getfoundry.sh/getting-started/installation)
 Run tests in the root directory with `forge test`
 
-## Monitor events
+## Monitor token events
+
+-   You need an API key to access a Node RPC endpoint. Get one for Ethereum Goerli at https://www.alchemy.com/.
+-   Create a text file `.env` in the root dir and add your complete URL like so
+
+```bash
+# .env file
+ETH_GOERLI=<Your RPC URL>
+```
+
+-   Then, install dependencies and run the monitor script.
 
 ```bash
 # Using Python 3.10

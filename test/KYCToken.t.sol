@@ -3,7 +3,6 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "../src/KYCToken.sol";
-import {MockKYCToken} from "./mocks/MockKYCToken.sol";
 
 contract KYCTokenTest is Test {
     KYCToken public token;
@@ -76,13 +75,18 @@ contract KYCTokenTest is Test {
                                 TRANSFER TESTS
     //////////////////////////////////////////////////////////////*/
 
-    function testTransferToNonKYC(address customer) public {
-        vm.assume(customer != testRunner && customer != address(0));
-        // Authorize and mint some KYC to current test runner
+    function testTransferToNonKYC(address kycCustomer, address customer)
+        public
+    {
+        vm.assume(customer != kycCustomer && customer != address(0));
+        vm.assume(kycCustomer != address(0));
+        // Authorize and mint some KYC to kycCustomer
+        vm.deal(kycCustomer, 1 ether);
+        vm.startPrank(kycCustomer);
         token.kyc("Test runner");
-        token.mint(testRunner, 1e18);
-
+        token.mint(kycCustomer, 1e18);
         vm.expectRevert("Receiver does not have valid KYC or accreditation!");
         token.transfer(customer, 1e3);
+        vm.stopPrank();
     }
 }
