@@ -53,6 +53,7 @@ contract KYCTokenTest is Test {
 
     function testMintIfAccredited(address customer, uint256 amount) public {
         vm.assume(amount >= 1 ether);
+        vm.assume(customer != address(0));
         vm.deal(customer, amount);
 
         vm.startPrank(customer);

@@ -8,6 +8,10 @@ contract KYCToken is ERC20 {
 
     constructor() ERC20("KYC Token", "KYC") {}
 
+    /*///////////////////////////////////////////////////////////////
+                                KYC LOGIC
+    //////////////////////////////////////////////////////////////*/
+
     function kyc(string calldata name) public {
         // Make sure 'name' is not empty
         require(!_isEmpty(name));
@@ -27,6 +31,10 @@ contract KYCToken is ERC20 {
         return bytes(value).length == 0;
     }
 
+    /*///////////////////////////////////////////////////////////////
+                                KYC CHECK
+    //////////////////////////////////////////////////////////////*/
+
     function _beforeTokenTransfer(
         address from,
         address to,
@@ -41,6 +49,10 @@ contract KYCToken is ERC20 {
             "Receiver does not have valid KYC or accreditation!"
         );
     }
+
+    /*///////////////////////////////////////////////////////////////
+                        CONVENIENCE FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
 
     function mint(address to, uint256 amount) external {
         _mint(to, amount);
