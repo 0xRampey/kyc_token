@@ -28,32 +28,19 @@ contract KYCToken is ERC20 {
         return bytes(value).length == 0;
     }
 
-    function _mint(address to, uint256 amount)
-        internal
-        override
+    function mint(address to, uint256 amount)
+        external
         checkKYC
         checkAccredited
     {
-        totalSupply += amount;
-
-        // Cannot overflow because the sum of all user
-        // balances can't exceed the max uint256 value.
-        unchecked {
-            balanceOf[to] += amount;
-        }
-
-        emit Transfer(address(0), to, amount);
+        _mint(to, amount);
     }
 
-    function _burn(address from, uint256 amount) internal override checkKYC {
-        balanceOf[from] -= amount;
-
-        // Cannot underflow because a user's balance
-        // will never be larger than the total supply.
-        unchecked {
-            totalSupply -= amount;
-        }
-
-        emit Transfer(from, address(0), amount);
+    function burn(address from, uint256 amount)
+        external
+        checkKYC
+        checkAccredited
+    {
+        _burn(from, amount);
     }
 }

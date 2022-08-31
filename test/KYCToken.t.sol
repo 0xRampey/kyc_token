@@ -6,10 +6,10 @@ import "../src/KYCToken.sol";
 import {MockKYCToken} from "./mocks/MockKYCToken.sol";
 
 contract KYCTokenTest is Test {
-    MockKYCToken public token;
+    KYCToken public token;
 
     function setUp() public {
-        token = new MockKYCToken();
+        token = new KYCToken();
     }
 
     function testFailKYCOnEmptyName() public {
