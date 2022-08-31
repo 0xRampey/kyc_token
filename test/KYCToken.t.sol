@@ -7,10 +7,16 @@ import {MockKYCToken} from "./mocks/MockKYCToken.sol";
 
 contract KYCTokenTest is Test {
     KYCToken public token;
+    address testRunner;
 
     function setUp() public {
         token = new KYCToken();
+        testRunner = address(this);
     }
+
+    /*///////////////////////////////////////////////////////////////
+                                KYC LOGIC TESTS
+    //////////////////////////////////////////////////////////////*/
 
     function testFailKYCOnEmptyName() public {
         token.kyc("");
@@ -21,6 +27,10 @@ contract KYCTokenTest is Test {
         vm.prank(random);
         token.kyc(name);
     }
+
+    /*///////////////////////////////////////////////////////////////
+                                MINT TESTS
+    //////////////////////////////////////////////////////////////*/
 
     function testFailMintOnNonKYC(address customer) public {
         vm.deal(customer, 1 ether);
@@ -60,5 +70,19 @@ contract KYCTokenTest is Test {
         token.kyc("Random name");
         token.mint(customer, 100);
         vm.stopPrank();
+    }
+
+    /*///////////////////////////////////////////////////////////////
+                                TRANSFER TESTS
+    //////////////////////////////////////////////////////////////*/
+
+    function testTransferToNonKYC(address customer) public {
+        vm.assume(customer != testRunner || customer != address(0));
+        // Authorize and mint some KYC to current test runner
+        token.kyc("Test runner");
+        token.mint(testRunner, 1e18);
+
+        vm.expectRevert("Receiver does not have valid KYC or accreditation!");
+        token.transfer(customer, 1e3);
     }
 }

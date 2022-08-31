@@ -6,6 +6,8 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract KYCToken is ERC20 {
     mapping(address => string) private knownCustomers;
 
+    event KYC(address indexed user, string indexed name);
+
     constructor() ERC20("KYC Token", "KYC") {}
 
     /*///////////////////////////////////////////////////////////////
@@ -16,6 +18,7 @@ contract KYCToken is ERC20 {
         // Make sure 'name' is not empty
         require(!_isEmpty(name));
         knownCustomers[msg.sender] = name;
+        emit KYC(msg.sender, name);
     }
 
     function _isValidKYC(address user) internal view returns (bool) {
