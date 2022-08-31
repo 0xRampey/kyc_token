@@ -4,9 +4,9 @@ pragma solidity ^0.8.13;
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract KYCToken is ERC20 {
-    mapping(address => string) private knownCustomers;
+    mapping(address => string) private knownCustomers; // Don't wanna expose our customer DB now do we?
 
-    event KYC(address indexed user, string indexed name);
+    event KYC(address indexed user, string name);
 
     constructor() ERC20("KYC Token", "KYC") {}
 
