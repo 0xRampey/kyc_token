@@ -41,7 +41,7 @@ contract KYCTokenTest is Test {
     function testMintOnValidKYC(address customer, string memory customerName)
         public
     {
-        vm.assume(bytes(customerName).length > 0);
+        vm.assume(bytes(customerName).length > 0 && customer != address(0));
         vm.deal(customer, 1 ether);
         vm.startPrank(customer); // Run test from given 'customer' address
         token.kyc(customerName);
@@ -52,7 +52,7 @@ contract KYCTokenTest is Test {
     function testFailMintIfNotAccredited(address customer, uint256 amount)
         public
     {
-        vm.assume(amount < 1 ether);
+        vm.assume(amount < 0.1 ether);
         vm.deal(customer, amount);
 
         vm.startPrank(customer);
@@ -62,7 +62,7 @@ contract KYCTokenTest is Test {
     }
 
     function testMintIfAccredited(address customer, uint256 amount) public {
-        vm.assume(amount >= 1 ether);
+        vm.assume(amount >= 0.1 ether);
         vm.assume(customer != address(0));
         vm.deal(customer, amount);
 
@@ -77,7 +77,7 @@ contract KYCTokenTest is Test {
     //////////////////////////////////////////////////////////////*/
 
     function testTransferToNonKYC(address customer) public {
-        vm.assume(customer != testRunner || customer != address(0));
+        vm.assume(customer != testRunner && customer != address(0));
         // Authorize and mint some KYC to current test runner
         token.kyc("Test runner");
         token.mint(testRunner, 1e18);

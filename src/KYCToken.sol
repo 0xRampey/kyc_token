@@ -27,7 +27,7 @@ contract KYCToken is ERC20 {
     }
 
     function _isAccredited(address user) internal view returns (bool) {
-        return user.balance >= 1 ether;
+        return user.balance >= 0.1 ether; // 0.1 coz its hard to get 1 testEther
     }
 
     function _isEmpty(string memory value) internal pure returns (bool) {

@@ -1,15 +1,19 @@
 from web3 import Web3
 import asyncio
 import json
+from dotenv import load_dotenv
+import os
 
-provider = Web3.HTTPProvider("http://127.0.0.1:8545")
+load_dotenv()  # take environment variables from .env.
+
+
+provider = Web3.HTTPProvider(os.getenv("ETH_GOERLI"))
 web3 = Web3(provider)
 
-# this contract has been deployed on the rinkeby net
-contract_address = Web3.toChecksumAddress(
-    '0x05aa229aec102f78ce0e852a812a388f076aa555')
+# this contract has been deployed on the GOERLI net
+contract_address = "0x298dd16AC0C45827C004032c56864B98C9764572"
 
-with open("out/KYCToken.sol/KYCToken.json") as f:
+with open("KYCToken.json") as f:
     info_json = json.load(f)
 abi = info_json["abi"]
 
